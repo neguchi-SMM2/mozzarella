@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>モッツァレラチーズゲーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>モッツァレラチーズゲーム</h1>
+
+    <div id="modeSelection">
+      <button onclick="startLocalMode()">ローカルで遊ぶ</button>
+      <button disabled>オンラインで遊ぶ（準備中）</button>
+    </div>
+
+    <div id="setup" class="hidden">
+      <input type="text" id="playerName" placeholder="名前を入力">
+      <button onclick="addPlayer()">追加</button>
+      <div id="playerList"></div>
+      <button onclick="startGame()">ゲーム開始</button>
+    </div>
+
+    <div id="game" class="hidden">
+      <h2 id="currentPlayerName"></h2>
+      <p>前の音量：<span id="previousVolume">-</span></p>
+      <p>現在の音量：<span id="currentVolume">0</span></p>
+
+      <div class="volume-bar">
+        <div class="volume-fill" id="volumeBar"></div>
+      </div>
+
+      <canvas id="waveform" width="300" height="50"></canvas>
+    </div>
+
+    <div id="result" class="hidden">
+      <h2 id="resultText"></h2>
+      <button onclick="resetGame()">もう一回プレイ</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
