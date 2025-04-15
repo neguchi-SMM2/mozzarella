@@ -79,19 +79,6 @@ function update() {
     document.body.style.backgroundColor = "white";
   }
 
-  if (volume > maxVolume) maxVolume = volume;
-
-  // 無音が続いたら終了
-  if (volume > 5) {
-    clearTimeout(silenceTimeout);
-  } else {
-    if (!silenceTimeout) {
-      silenceTimeout = setTimeout(() => {
-        endTurnFinal();
-      }, 500); // 0.5秒無音で終了
-    }
-  }
-
   animationId = requestAnimationFrame(update);
 }
 
