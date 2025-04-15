@@ -8,7 +8,7 @@
 <body>
   <div id="modeSelection">
     <h2>モード選択</h2>
-    <button onclick="startLocalMode()">ローカル対戦</button>
+    <button onclick="startLocalMode()" class="button">ローカル対戦</button>
   </div>
 
   <div id="setup" class="hidden">
@@ -17,7 +17,7 @@
     <button onclick="addPlayer()">追加</button>
     <button onclick="clearPlayers()">全て削除</button>
     <div id="playerList"></div>
-    <button onclick="startGame()">ゲーム開始</button>
+    <button onclick="startGame()" class="button">ゲーム開始</button>
   </div>
 
   <div id="game" class="hidden">
@@ -27,14 +27,14 @@
     <p>このターンの最大音量: <span id="maxVolumeThisTurnText">0</span></p>
     <div id="volumeBar"></div>
     <canvas id="waveform" width="400" height="100"></canvas>
-    <button id="startTurnButton" onclick="prepareTurn()">モッツァレラチーズ！</button>
-    <button id="nextPlayerButton" class="hidden" onclick="nextTurn()">次の人へ</button>
+    <button id="startTurnButton" onclick="prepareTurn()" class="button">モッツァレラチーズ！</button>
+    <button id="nextPlayerButton" class="hidden" onclick="nextTurn()" class="button">次の人へ</button>
     <p id="maxVolumeDisplay" class="large-volume"></p>
   </div>
 
   <div id="result" class="hidden">
     <h2 id="resultText"></h2>
-    <button onclick="resetGame()">もう一度</button>
+    <button onclick="resetGame()" class="button">もう一度</button>
   </div>
 
   <script src="script.js"></script>
