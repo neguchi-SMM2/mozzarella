@@ -68,6 +68,37 @@ function prepareTurn() {
   startMic();
 }
 
+function drawWaveform(dataArray) {
+  const canvas = document.getElementById("waveform");
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#00ccff";
+  ctx.beginPath();
+
+  const sliceWidth = canvas.width / dataArray.length;
+  let x = 0;
+
+  for (let i = 0; i < dataArray.length; i++) {
+    const v = dataArray[i] / 128.0;
+    const y = v * canvas.height / 2;
+
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+
+    x += sliceWidth;
+  }
+
+  ctx.lineTo(canvas.width, canvas.height / 2);
+  ctx.stroke();
+}
+
 function startMic() {
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
