@@ -1,4 +1,3 @@
-// ゲームの状態管理用変数
 let players = [];
 let currentIndex = 0;
 let previousMaxVolume = 0;
@@ -117,6 +116,7 @@ function startMic() {
 
 function update() {
   analyser.getByteTimeDomainData(dataArray);
+  drawWaveform(dataArray);
 
   let sum = 0;
   for (let i = 0; i < dataArray.length; i++) {
