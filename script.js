@@ -71,15 +71,14 @@ function prepareTurn() {
 function drawWaveform(dataArray) {
   const canvas = document.getElementById("waveform");
   const ctx = canvas.getContext("2d");
-
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.lineWidth = 2;
-  ctx.strokeStyle = "#00ccff";
+  ctx.strokeStyle = "lime";
   ctx.beginPath();
 
-  const sliceWidth = canvas.width / dataArray.length;
+  const sliceWidth = canvas.width * 1.0 / dataArray.length;
   let x = 0;
 
   for (let i = 0; i < dataArray.length; i++) {
