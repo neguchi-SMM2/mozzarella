@@ -116,7 +116,6 @@ function startMic() {
 
 function update() {
   analyser.getByteTimeDomainData(dataArray);
-  drawWaveform(dataArray);
 
   let sum = 0;
   for (let i = 0; i < dataArray.length; i++) {
