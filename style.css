@@ -57,10 +57,11 @@ input[type="text"] {
 }
 
 canvas {
-  border: 1px solid #ccc;
-  margin: 10px 0;
-  width: 100%;
+  border: 2px solid #ccc;
   border-radius: 8px;
+  margin: 20px auto;
+  display: block;
+  background: #1e1e1e;
 }
 
 .large-volume {
