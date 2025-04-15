@@ -31,3 +31,14 @@ canvas {
 .player-entry span {
   flex: 1;
 }
+.button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* 影を追加 */
+  transition: all 0.3s ease;
+}
