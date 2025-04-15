@@ -1,92 +1,115 @@
 body {
-  font-family: 'Helvetica Neue', sans-serif;
-  background: linear-gradient(to right, #f0f4f8, #d9e2ec);
-  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  padding: 20px;
   margin: 0;
-  padding: 0;
-}
-
-h2 {
-  margin-bottom: 16px;
-}
-
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 8px;
-  background-color: #2b6cb0;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+  background-color: #fffaf0;
+  color: #333;
   transition: background-color 0.3s;
 }
 
+.hidden {
+  display: none;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 8px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffcf48;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
 button:hover {
-  background-color: #2c5282;
+  background-color: #ffd95b;
 }
 
 input[type="text"] {
-  padding: 8px;
-  border-radius: 5px;
+  padding: 10px;
+  margin: 8px;
+  font-size: 1rem;
   border: 1px solid #ccc;
-  font-size: 16px;
+  border-radius: 6px;
+  width: 250px;
+  max-width: 80%;
 }
 
-#playerList div {
-  margin: 4px 0;
+#playerList {
+  margin-top: 10px;
 }
 
-.container {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  text-align: center;
+.player-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0;
 }
 
-.hidden { display: none; }
+.player-entry button {
+  margin-left: 10px;
+  background-color: #f08080;
+  color: white;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+.player-entry button:hover {
+  background-color: #e06666;
+}
 
 #volumeBar {
   height: 20px;
   background-color: green;
   margin-top: 10px;
-  border-radius: 10px;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
 }
 
 canvas {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  margin: 20px auto;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
   display: block;
-  background: #1e1e1e;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .large-volume {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   color: orange;
   margin-top: 10px;
 }
 
-.name-tag {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 10px;
-  background: #edf2f7;
-  border-radius: 5px;
-  margin: 5px 0;
-}
+@media screen and (max-width: 600px) {
+  button, input[type="text"] {
+    width: 90%;
+    font-size: 1.1rem;
+  }
 
-.name-tag button {
-  background-color: #e53e3e;
-  font-size: 12px;
-  padding: 4px 8px;
-}
+  h2 {
+    font-size: 1.5rem;
+  }
 
-.name-tag button:hover {
-  background-color: #c53030;
+  .large-volume {
+    font-size: 20px;
+  }
+
+  #volumeBar {
+    height: 16px;
+  }
+
+  canvas {
+    max-width: 100%;
+  }
 }
