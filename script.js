@@ -47,8 +47,8 @@ function startMic() {
       updateAudio();
     })
     .catch(err => {
-      console.error("マイクのアクセスが許可されていないか、エラーが発生しました:", err);
-      alert("マイクのアクセスに失敗しました。再度試してみてください。");
+      console.error("マイクのアクセスに失敗しました:", err);
+      alert(`マイクのアクセスに失敗しました。エラー: ${err.name}\n${err.message}`);
     });
 }
 
@@ -86,6 +86,28 @@ function updateAudio() {
   }
 
   animationId = requestAnimationFrame(updateAudio); // ループ
+}
+
+function drawWaveform(dataArray) {
+  const canvas = document.getElementById("waveform");
+  const ctx = canvas.getContext("2d");
+
+  // 波形を描画する前にクリア
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const width = canvas.width;
+  const height = canvas.height;
+  const step = Math.ceil(dataArray.length / width); // 横に何ピクセルごとにデータを取るか
+
+  ctx.beginPath();
+  for (let i = 0; i < width; i++) {
+    const x = i;
+    const y = (dataArray[i * step] / 128) * height / 2 + height / 2;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "white";
+  ctx.stroke();
 }
 
 function endTurnFinal() {
