@@ -10,21 +10,15 @@
   <div class="container">
     <h1>モッツァレラチーズゲーム</h1>
 
-    <div id="modeSelection">
-      <button onclick="startLocalMode()">ローカルで遊ぶ</button>
-      <button disabled>オンラインで遊ぶ（準備中）</button>
-    </div>
-
-    <div id="setup" class="hidden">
+    <div id="setup">
       <input type="text" id="playerName" placeholder="名前を入力">
-      <button onclick="addPlayer()">追加</button>
+      <button onclick="addPlayer()">プレイヤーを追加</button>
       <div id="playerList"></div>
       <button onclick="startGame()">ゲーム開始</button>
     </div>
 
     <div id="game" class="hidden">
       <h2 id="currentPlayerName"></h2>
-      <p>前の音量：<span id="previousVolume">-</span></p>
       <p>現在の音量：<span id="currentVolume">0</span></p>
 
       <div class="volume-bar">
@@ -32,6 +26,8 @@
       </div>
 
       <canvas id="waveform" width="300" height="50"></canvas>
+
+      <button id="shoutButton" onclick="endTurn()">モッツァレラチーズ！</button>
     </div>
 
     <div id="result" class="hidden">
