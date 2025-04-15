@@ -20,6 +20,45 @@ function startGame() {
   updatePlayerName();
 }
 
+function drawWaveform(dataArray) {
+  const canvas = document.getElementById("waveform");
+  const ctx = canvas.getContext("2d");
+
+  // 波形を描画する前にクリア
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const width = canvas.width;
+  const height = canvas.height;
+  const step = Math.ceil(dataArray.length / width); // 横に何ピクセルごとにデータを取るか
+
+  ctx.beginPath();
+  for (let i = 0; i < width; i++) {
+    const x = i;
+    const y = (dataArray[i * step] / 128) * height / 2 + height / 2;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "white";
+  ctx.stroke();
+}
+
+function endTurnFinal() {
+  stopMic(); // 音声監視を終了
+  silenceTimeout = null;
+
+  // 背景色で結果表示
+  if (maxVolume < previousVolume) {
+    document.body.style.backgroundColor = "#f8d0d0"; // 赤：負け
+  } else {
+    document.body.style.backgroundColor = "#d4f5d4"; // 緑：セーフ
+  }
+
+  previousVolume = maxVolume;
+
+  document.getElementById("shoutButton").classList.add("hidden");
+  showNextButton();
+}
+
 function updatePlayerName() {
   document.getElementById("currentPlayerName").textContent = `${players[currentIndex]} の番！`;
   document.getElementById("currentVolume").textContent = "0";
@@ -86,45 +125,6 @@ function updateAudio() {
   }
 
   animationId = requestAnimationFrame(updateAudio); // ループ
-}
-
-function drawWaveform(dataArray) {
-  const canvas = document.getElementById("waveform");
-  const ctx = canvas.getContext("2d");
-
-  // 波形を描画する前にクリア
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const width = canvas.width;
-  const height = canvas.height;
-  const step = Math.ceil(dataArray.length / width); // 横に何ピクセルごとにデータを取るか
-
-  ctx.beginPath();
-  for (let i = 0; i < width; i++) {
-    const x = i;
-    const y = (dataArray[i * step] / 128) * height / 2 + height / 2;
-    ctx.lineTo(x, y);
-  }
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "white";
-  ctx.stroke();
-}
-
-function endTurnFinal() {
-  stopMic(); // 音声監視を終了
-  silenceTimeout = null;
-
-  // 背景色で結果表示
-  if (maxVolume < previousVolume) {
-    document.body.style.backgroundColor = "#f8d0d0"; // 赤：負け
-  } else {
-    document.body.style.backgroundColor = "#d4f5d4"; // 緑：セーフ
-  }
-
-  previousVolume = maxVolume;
-
-  document.getElementById("shoutButton").classList.add("hidden");
-  showNextButton();
 }
 
 function showNextButton() {
