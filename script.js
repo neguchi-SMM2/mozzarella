@@ -32,15 +32,24 @@ function startTurn() {
 }
 
 function startMic() {
-  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioContext.createAnalyser();
-    microphone = audioContext.createMediaStreamSource(stream);
-    analyser.fftSize = 256;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    microphone.connect(analyser);
-    updateAudio();
-  });
+  // マイクストリームを取得
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      // Web Audio APIを使用してマイクのストリームを処理
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      microphone = audioContext.createMediaStreamSource(stream);
+      analyser.fftSize = 256; // 周波数解析の精度
+      dataArray = new Uint8Array(analyser.frequencyBinCount); // バイトデータの配列
+      microphone.connect(analyser);
+
+      // 波形を更新
+      updateAudio();
+    })
+    .catch(err => {
+      console.error("マイクのアクセスが許可されていないか、エラーが発生しました:", err);
+      alert("マイクのアクセスに失敗しました。再度試してみてください。");
+    });
 }
 
 function stopMic() {
@@ -51,8 +60,8 @@ function stopMic() {
 }
 
 function updateAudio() {
-  analyser.getByteTimeDomainData(dataArray);
-  drawWaveform(dataArray);
+  analyser.getByteTimeDomainData(dataArray); // データを取得
+  drawWaveform(dataArray); // 波形描画
 
   let sum = 0;
   for (let i = 0; i < dataArray.length; i++) {
@@ -65,21 +74,22 @@ function updateAudio() {
 
   if (volume > maxVolume) maxVolume = volume;
 
+  // 無音が続いたら終了
   if (volume > 5) {
     clearTimeout(silenceTimeout);
   } else {
     if (!silenceTimeout) {
       silenceTimeout = setTimeout(() => {
         endTurnFinal();
-      }, 600); // 無音が0.6秒続いたら終了
+      }, 600); // 0.6秒無音で終了
     }
   }
 
-  animationId = requestAnimationFrame(updateAudio);
+  animationId = requestAnimationFrame(updateAudio); // ループ
 }
 
 function endTurnFinal() {
-  stopMic();
+  stopMic(); // 音声監視を終了
   silenceTimeout = null;
 
   // 背景色で結果表示
