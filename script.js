@@ -3,26 +3,8 @@ let currentIndex = 0;
 let previousVolume = 0;
 let audioContext, analyser, microphone, dataArray;
 let animationId;
-
-function startLocalMode() {
-  document.getElementById("modeSelection").classList.add("hidden");
-  document.getElementById("setup").classList.remove("hidden");
-}
-
-function addPlayer() {
-  const nameInput = document.getElementById("playerName");
-  const name = nameInput.value.trim();
-  if (name) {
-    players.push(name);
-    updatePlayerList();
-    nameInput.value = "";
-  }
-}
-
-function updatePlayerList() {
-  const list = document.getElementById("playerList");
-  list.innerHTML = players.map(name => `<div>${name}</div>`).join("");
-}
+let shoutButtonPressed = false;
+let silenceTimeout;
 
 function startGame() {
   if (players.length < 2) {
@@ -65,18 +47,16 @@ function update() {
 
   document.getElementById("currentPlayerName").textContent = `${players[currentIndex]} の番！`;
   document.getElementById("currentVolume").textContent = volumeRounded;
-  document.getElementById("previousVolume").textContent = previousVolume;
   document.getElementById("volumeBar").style.width = `${volumeRounded}%`;
 
-  // 背景色変更
-  if (volumeRounded > previousVolume) {
-    document.body.style.backgroundColor = "#d4f5d4"; // 緑
-  } else if (volumeRounded < previousVolume && previousVolume > 0) {
-    document.body.style.backgroundColor = "#f5d4d4"; // 赤
-    endGame();
-    return;
-  } else {
-    document.body.style.backgroundColor = "white";
+  // 音声が出ていない時間が続いたら「モッツァレラチーズ」終了と判断
+  if (volumeRounded > 0) {
+    clearTimeout(silenceTimeout);
+    shoutButtonPressed = true;  // 発声している状態
+  } else if (shoutButtonPressed) {
+    silenceTimeout = setTimeout(() => {
+      endTurn(volumeRounded);
+    }, 500);  // 0.5秒無音でターン終了
   }
 
   animationId = requestAnimationFrame(update);
@@ -112,14 +92,42 @@ function drawWaveform(dataArray) {
   ctx.stroke();
 }
 
-function endGame() {
-  cancelAnimationFrame(animationId);
-  document.getElementById("game").classList.add("hidden");
-  document.getElementById("result").classList.remove("hidden");
+function endTurn(volume) {
+  // 現在の音量を最大値として記録
+  previousVolume = volume;
+  document.body.style.backgroundColor = "#d4f5d4"; // 緑
 
-  const winnerIndex = (currentIndex - 1 + players.length) % players.length;
-  const winner = players[winnerIndex];
-  document.getElementById("resultText").textContent = `${winner} の勝ち！`;
+  // 「次の人へ」ボタンを表示
+  document.getElementById("shoutButton").classList.add("hidden");
+  showNextButton();
+}
+
+function showNextButton() {
+  const nextButton = document.createElement("button");
+  nextButton.textContent = "次の人へ";
+  nextButton.onclick = nextPlayer;
+  document.getElementById("game").appendChild(nextButton);
+}
+
+function nextPlayer() {
+  currentIndex = (currentIndex + 1) % players.length;
+  document.getElementById("shoutButton").classList.remove("hidden");
+  document.getElementById("game").querySelector("button:last-child").remove();  // 「次の人へ」ボタン削除
+}
+
+function addPlayer() {
+  const nameInput = document.getElementById("playerName");
+  const name = nameInput.value.trim();
+  if (name) {
+    players.push(name);
+    updatePlayerList();
+    nameInput.value = "";
+  }
+}
+
+function updatePlayerList() {
+  const list = document.getElementById("playerList");
+  list.innerHTML = players.map(name => `<div>${name}</div>`).join("");
 }
 
 function resetGame() {
