@@ -1,12 +1,17 @@
+// ゲームの状態管理用変数
 let players = [];
 let currentIndex = 0;
-let previousVolume = 0;
+let previousMaxVolume = 0;
 let audioContext, analyser, microphone, dataArray;
 let animationId;
+let maxVolumeThisTurn = 0;
+let silenceTimer;
+let hasPassedVolumeThreshold = false;
 
 function startLocalMode() {
   document.getElementById("modeSelection").classList.add("hidden");
   document.getElementById("setup").classList.remove("hidden");
+  updatePlayerList();
 }
 
 function addPlayer() {
@@ -19,9 +24,21 @@ function addPlayer() {
   }
 }
 
+function removePlayer(index) {
+  players.splice(index, 1);
+  updatePlayerList();
+}
+
+function clearPlayers() {
+  players = [];
+  updatePlayerList();
+}
+
 function updatePlayerList() {
   const list = document.getElementById("playerList");
-  list.innerHTML = players.map(name => `<div>${name}</div>`).join("");
+  list.innerHTML = players.map((name, i) =>
+    `<div class="player-entry"><span>${name}</span><button onclick="removePlayer(${i})">削除</button></div>`
+  ).join("");
 }
 
 function startGame() {
@@ -29,12 +46,25 @@ function startGame() {
     alert("プレイヤーは2人以上必要です！");
     return;
   }
-
   currentIndex = 0;
-  previousVolume = 0;
+  previousMaxVolume = 0;
   document.getElementById("setup").classList.add("hidden");
   document.getElementById("game").classList.remove("hidden");
   document.body.style.backgroundColor = "white";
+  document.getElementById("startTurnButton").classList.remove("hidden");
+  document.getElementById("nextPlayerButton").classList.add("hidden");
+}
+
+function prepareTurn() {
+  document.getElementById("startTurnButton").classList.add("hidden");
+  document.getElementById("nextPlayerButton").classList.add("hidden");
+  maxVolumeThisTurn = 0;
+  hasPassedVolumeThreshold = false;
+  silenceTimer = null;
+  document.getElementById("maxVolumeDisplay").textContent = "";
+  document.getElementById("maxVolumeThisTurnText").textContent = "0";
+  document.body.style.backgroundColor = "white";
+  document.getElementById("currentPlayerName").textContent = `${players[currentIndex]} の番！`;
   startMic();
 }
 
@@ -48,12 +78,15 @@ function startMic() {
       dataArray = new Uint8Array(analyser.frequencyBinCount);
       microphone.connect(analyser);
       update();
+    })
+    .catch(err => {
+      console.error("マイクのアクセスが許可されていないか、エラーが発生しました:", err);
+      alert("マイクのアクセスを許可してください。ページを再読み込みしてください。");
     });
 }
 
 function update() {
   analyser.getByteTimeDomainData(dataArray);
-  drawWaveform(dataArray);
 
   let sum = 0;
   for (let i = 0; i < dataArray.length; i++) {
@@ -63,69 +96,67 @@ function update() {
   const volume = Math.sqrt(sum / dataArray.length);
   const volumeRounded = Math.round(volume * 100);
 
-  document.getElementById("currentPlayerName").textContent = `${players[currentIndex]} の番！`;
+  if (volumeRounded > maxVolumeThisTurn) {
+    maxVolumeThisTurn = volumeRounded;
+    document.getElementById("maxVolumeThisTurnText").textContent = maxVolumeThisTurn;
+  }
+
   document.getElementById("currentVolume").textContent = volumeRounded;
-  document.getElementById("previousVolume").textContent = previousVolume;
+  document.getElementById("previousVolume").textContent = previousMaxVolume;
   document.getElementById("volumeBar").style.width = `${volumeRounded}%`;
 
-  // 背景色変更
-  if (volumeRounded > previousVolume) {
-    document.body.style.backgroundColor = "#d4f5d4"; // 緑
-  } else if (volumeRounded < previousVolume && previousVolume > 0) {
-    document.body.style.backgroundColor = "#f5d4d4"; // 赤
-    endGame();
-    return;
+  if (volumeRounded > previousMaxVolume) {
+    document.body.style.backgroundColor = "#d4f5d4";
+  } else if (volumeRounded < previousMaxVolume && previousMaxVolume > 0) {
+    document.body.style.backgroundColor = "#f5d4d4";
   } else {
     document.body.style.backgroundColor = "white";
+  }
+
+  if (volumeRounded > 4) {
+    hasPassedVolumeThreshold = true;
+    if (silenceTimer) clearTimeout(silenceTimer);
+  }
+
+  if (hasPassedVolumeThreshold && volumeRounded <= 1) {
+    if (!silenceTimer) {
+      silenceTimer = setTimeout(() => {
+        document.getElementById("nextPlayerButton").classList.remove("hidden");
+        document.getElementById("maxVolumeDisplay").textContent = `このターンの最大音量: ${maxVolumeThisTurn}`;
+        cancelAnimationFrame(animationId);
+      }, 500);
+    }
+  } else {
+    if (silenceTimer) clearTimeout(silenceTimer);
+    silenceTimer = null;
   }
 
   animationId = requestAnimationFrame(update);
 }
 
-function drawWaveform(dataArray) {
-  const canvas = document.getElementById("waveform");
-  const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "lime";
-  ctx.beginPath();
-
-  const sliceWidth = canvas.width * 1.0 / dataArray.length;
-  let x = 0;
-
-  for (let i = 0; i < dataArray.length; i++) {
-    const v = dataArray[i] / 128.0;
-    const y = v * canvas.height / 2;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-
-    x += sliceWidth;
+function nextTurn() {
+  if (maxVolumeThisTurn < previousMaxVolume && previousMaxVolume > 0) {
+    endGame();
+    return;
   }
-
-  ctx.lineTo(canvas.width, canvas.height / 2);
-  ctx.stroke();
+  previousMaxVolume = maxVolumeThisTurn;
+  currentIndex = (currentIndex + 1) % players.length;
+  document.getElementById("nextPlayerButton").classList.add("hidden");
+  document.getElementById("startTurnButton").classList.remove("hidden");
+  document.getElementById("maxVolumeDisplay").textContent = "";
 }
 
 function endGame() {
   cancelAnimationFrame(animationId);
   document.getElementById("game").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
-
-  const winnerIndex = (currentIndex - 1 + players.length) % players.length;
-  const winner = players[winnerIndex];
-  document.getElementById("resultText").textContent = `${winner} の勝ち！`;
+  const loser = players[currentIndex];
+  document.getElementById("resultText").textContent = `${loser} の負け！`;
 }
 
 function resetGame() {
-  players = [];
   currentIndex = 0;
-  previousVolume = 0;
+  previousMaxVolume = 0;
   document.getElementById("setup").classList.remove("hidden");
   document.getElementById("game").classList.add("hidden");
   document.getElementById("result").classList.add("hidden");
