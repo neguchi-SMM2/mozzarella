@@ -6,35 +6,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="modeSelection">
-    <h2>モード選択</h2>
-    <button onclick="startLocalMode()" class="button">ローカル対戦</button>
-  </div>
+  <div class="container">
+    <div id="modeSelection" class="card">
+      <h2>モード選択</h2>
+      <button onclick="startLocalMode()">ローカル対戦</button>
+    </div>
 
-  <div id="setup" class="hidden">
-    <h2>プレイヤー設定</h2>
-    <input id="playerName" type="text" placeholder="プレイヤー名">
-    <button onclick="addPlayer()">追加</button>
-    <button onclick="clearPlayers()">全て削除</button>
-    <div id="playerList"></div>
-    <button onclick="startGame()" class="button">ゲーム開始</button>
-  </div>
+    <div id="setup" class="card hidden">
+      <h2>プレイヤー設定</h2>
+      <input id="playerName" type="text" placeholder="プレイヤー名">
+      <div class="btn-group">
+        <button onclick="addPlayer()">追加</button>
+        <button onclick="removeLastPlayer()">最後を削除</button>
+        <button onclick="clearPlayers()">全て削除</button>
+      </div>
+      <div id="playerList" class="player-list"></div>
+      <button onclick="startGame()">ゲーム開始</button>
+    </div>
 
-  <div id="game" class="hidden">
-    <h2 id="currentPlayerName"></h2>
-    <p>現在の音量: <span id="currentVolume">0</span></p>
-    <p>前の最大音量: <span id="previousVolume">0</span></p>
-    <p>このターンの最大音量: <span id="maxVolumeThisTurnText">0</span></p>
-    <div id="volumeBar"></div>
-    <canvas id="waveform" width="400" height="100"></canvas>
-    <button id="startTurnButton" onclick="prepareTurn()" class="button">モッツァレラチーズ！</button>
-    <button id="nextPlayerButton" class="hidden" onclick="nextTurn()" class="button">次の人へ</button>
-    <p id="maxVolumeDisplay" class="large-volume"></p>
-  </div>
+    <div id="game" class="card hidden">
+      <h2 id="currentPlayerName"></h2>
+      <p>現在の音量: <span id="currentVolume">0</span></p>
+      <p>前の最大音量: <span id="previousVolume">0</span></p>
+      <p>このターンの最大音量: <span id="maxVolumeThisTurnText">0</span></p>
+      <div id="volumeBar" class="volume-bar"></div>
+      <canvas id="waveform" width="400" height="100"></canvas>
+      <button id="startTurnButton" onclick="prepareTurn()">モッツァレラチーズ！</button>
+      <button id="nextPlayerButton" class="hidden" onclick="nextTurn()">次の人へ</button>
+      <p id="maxVolumeDisplay" class="large-volume"></p>
+    </div>
 
-  <div id="result" class="hidden">
-    <h2 id="resultText"></h2>
-    <button onclick="resetGame()" class="button">もう一度</button>
+    <div id="result" class="card hidden">
+      <h2 id="resultText"></h2>
+      <button onclick="resetGame()">もう一度</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
