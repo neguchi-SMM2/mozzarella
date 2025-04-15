@@ -62,7 +62,6 @@ canvas#waveform {
   border-radius: 4px;
 }
 
-/* スマホ対応 */
 @media (max-width: 600px) {
   input[type="text"] {
     width: 100%;
