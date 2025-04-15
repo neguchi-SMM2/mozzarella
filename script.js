@@ -81,7 +81,7 @@ function updateAudio() {
     if (!silenceTimeout) {
       silenceTimeout = setTimeout(() => {
         endTurnFinal();
-      }, 600); // 0.6秒無音で終了
+      }, 500); // 0.5秒無音で終了
     }
   }
 
