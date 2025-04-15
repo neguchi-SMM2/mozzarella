@@ -1,0 +1,74 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  transition: background-color 0.5s;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input[type="text"] {
+  width: 60%;
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+#playerList {
+  margin: 10px 0;
+  padding: 5px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+}
+
+.volume-bar {
+  height: 20px;
+  background: #ddd;
+  margin: 10px 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.volume-fill {
+  height: 100%;
+  width: 0%;
+  background: dodgerblue;
+  transition: width 0.1s;
+}
+
+canvas#waveform {
+  width: 100%;
+  background-color: black;
+  border-radius: 4px;
+}
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+  input[type="text"] {
+    width: 100%;
+  }
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
