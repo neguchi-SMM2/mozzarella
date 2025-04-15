@@ -2,42 +2,39 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>モッツァレラチーズゲーム</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>モッツァレラチーズゲーム</h1>
+  <div id="modeSelection">
+    <h2>モード選択</h2>
+    <button onclick="startLocalMode()">ローカル対戦</button>
+  </div>
 
-    <div id="modeSelection">
-      <button onclick="startLocalMode()">ローカルで遊ぶ</button>
-      <button disabled>オンラインで遊ぶ（準備中）</button>
-    </div>
+  <div id="setup" class="hidden">
+    <h2>プレイヤー設定</h2>
+    <input id="playerName" type="text" placeholder="プレイヤー名">
+    <button onclick="addPlayer()">追加</button>
+    <button onclick="clearPlayers()">全て削除</button>
+    <div id="playerList"></div>
+    <button onclick="startGame()">ゲーム開始</button>
+  </div>
 
-    <div id="setup" class="hidden">
-      <input type="text" id="playerName" placeholder="名前を入力">
-      <button onclick="addPlayer()">追加</button>
-      <div id="playerList"></div>
-      <button onclick="startGame()">ゲーム開始</button>
-    </div>
+  <div id="game" class="hidden">
+    <h2 id="currentPlayerName"></h2>
+    <p>現在の音量: <span id="currentVolume">0</span></p>
+    <p>前の最大音量: <span id="previousVolume">0</span></p>
+    <p>このターンの最大音量: <span id="maxVolumeThisTurnText">0</span></p>
+    <div id="volumeBar"></div>
+    <canvas id="waveform" width="400" height="100"></canvas>
+    <button id="startTurnButton" onclick="prepareTurn()">モッツァレラチーズ！</button>
+    <button id="nextPlayerButton" class="hidden" onclick="nextTurn()">次の人へ</button>
+    <p id="maxVolumeDisplay" class="large-volume"></p>
+  </div>
 
-    <div id="game" class="hidden">
-      <h2 id="currentPlayerName"></h2>
-      <p>前の音量：<span id="previousVolume">-</span></p>
-      <p>現在の音量：<span id="currentVolume">0</span></p>
-
-      <div class="volume-bar">
-        <div class="volume-fill" id="volumeBar"></div>
-      </div>
-
-      <canvas id="waveform" width="300" height="50"></canvas>
-    </div>
-
-    <div id="result" class="hidden">
-      <h2 id="resultText"></h2>
-      <button onclick="resetGame()">もう一回プレイ</button>
-    </div>
+  <div id="result" class="hidden">
+    <h2 id="resultText"></h2>
+    <button onclick="resetGame()">もう一度</button>
   </div>
 
   <script src="script.js"></script>
