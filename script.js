@@ -225,7 +225,7 @@ function update() {
     if (!silenceTimer) {
       silenceTimer = setTimeout(() => {
         document.getElementById("nextPlayerButton").classList.remove("hidden");
-        document.getElementById("maxVolumeDisplay").textContent = `このターンの平均音量: ${maxVolumeThisTurn}`;
+        document.getElementById("maxVolumeDisplay").textContent = `このターンの記録: ${maxVolumeThisTurn}`;
         cancelAnimationFrame(animationId);
 
         if (isOnline && isHost) {
