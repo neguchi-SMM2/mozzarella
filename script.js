@@ -21,8 +21,14 @@ function startLocalMode() {
   updatePlayerList();
 }
 
-function startOnlineMode() {
+function developing() {
   alert("現在開発中です。");
+}
+
+function startOnlineMode() {
+  isOnline = true;
+  document.getElementById("modeSelection").classList.add("hidden");
+  document.getElementById("onlineSetup").classList.remove("hidden");
 }
 
 function connectToRoom() {
