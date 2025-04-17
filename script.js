@@ -22,9 +22,7 @@ function startLocalMode() {
 }
 
 function startOnlineMode() {
-  isOnline = true;
-  document.getElementById("modeSelection").classList.add("hidden");
-  document.getElementById("onlineSetup").classList.remove("hidden");
+  alert("現在開発中です。");
 }
 
 function connectToRoom() {
